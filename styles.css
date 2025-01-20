@@ -13,7 +13,6 @@ body {
 
 #word-grid {
     display: grid;
-    grid-template-columns: repeat(4, 60px);
     gap: 10px;
     justify-content: center;
     margin: 20px auto;
