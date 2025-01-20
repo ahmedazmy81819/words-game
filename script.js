@@ -1,7 +1,8 @@
-// قائمة كلمات عشوائية (من 3 إلى 6 حروف)
+// قائمة كلمات عشوائية (5 و 6 حروف فقط)
 const words = [
-    "كتاب", "شجرة", "نهر", "سماء", "زهرة", "عصفور", "تفاحة", "برتقال", "ليمون", "فراشة",
-    "مدرسة", "طائرة", "سيارة", "قطار", "بابون", "زرافة", "دولفين", "فيل", "نمر", "أسد",
+    "تفاحة", "برتقال", "موز", "فراولة", "عنب", "مانجو", "بطيخ", "شمام", "خوخ", "كمثرى",
+    "طائرة", "سيارة", "قطار", "دراجة", "سفينة", "غواصة", "طائرة", "سيارة", "قطار", "دراجة",
+    "مدرسة", "جامعة", "مكتبة", "مستشفى", "فندق", "مطعم", "سوق", "حديقة", "ملعب", "مسبح",
     "كمبيوتر", "هاتف", "شاشة", "لوحة", "قلم", "ورقة", "مكتب", "كرسي", "ساعة", "نظارة"
 ];
 let usedWords = JSON.parse(localStorage.getItem('usedWords')) || [];
@@ -20,11 +21,10 @@ const resultMessage = document.getElementById('result-message');
 const nextButton = document.getElementById('next-button');
 const homeButton = document.getElementById('home-button');
 
-// ترتيب الكيبورد العربي (QWERTY) من اليسار لليمين
+// ترتيب الكيبورد الجديد
 const keys = [
-    ['ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'خ', 'ح', 'ج'],
-    ['ش', 'س', 'ي', 'ب', 'ل', 'ا', 'ت', 'ن', 'م', 'ك', 'ط'],
-    ['ئ', 'ء', 'ؤ', 'ر', 'لا', 'ى', 'ة', 'و', 'ز', 'ظ']
+    ['د', 'ج', 'ح', 'خ', 'ه', 'ع', 'غ', 'ف', 'ق', 'ث', 'ص', 'ض', 'ط', 'ك', 'م', 'ن', 'ت', 'ا', 'ل', 'ب', 'ي', 'س', 'ش', 'ظ', 'ز', 'و', 'ة', 'ى', 'ل', 'ا', 'ر', 'ؤ', 'ء', 'ئ'],
+    ['⌫'] // زرار المسح
 ];
 
 // اختيار كلمة عشوائية
@@ -64,7 +64,12 @@ function createKeyboard() {
             keyElement.classList.add('key');
             keyElement.textContent = key;
             keyElement.setAttribute('data-key', key);
-            keyElement.addEventListener('click', () => handleKeyPress(key));
+            if (key === '⌫') {
+                keyElement.classList.add('delete-key');
+                keyElement.addEventListener('click', deleteLastLetter);
+            } else {
+                keyElement.addEventListener('click', () => handleKeyPress(key));
+            }
             rowElement.appendChild(keyElement);
         });
         keyboard.appendChild(rowElement);
@@ -80,6 +85,20 @@ function handleKeyPress(key) {
     for (let i = startIndex; i < endIndex; i++) {
         if (!cells[i].textContent) {
             cells[i].textContent = key;
+            break;
+        }
+    }
+}
+
+// مسح آخر حرف
+function deleteLastLetter() {
+    const cells = document.querySelectorAll('.cell');
+    const startIndex = currentAttempt * wordLength;
+    const endIndex = startIndex + wordLength;
+
+    for (let i = endIndex - 1; i >= startIndex; i--) {
+        if (cells[i].textContent) {
+            cells[i].textContent = '';
             break;
         }
     }
