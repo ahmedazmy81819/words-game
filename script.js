@@ -1,5 +1,5 @@
 // قائمة كلمات عشوائية
-const words = ["كتاب", "شمس", "قمر", "بحر", "جبل", "ورد", "عسل", "فجر", "ليل", "نهار"];
+const words = ["كتاب", "شمس", "قمر", "بحر", "جبل", "ورد", "عسل", "فجر", "ليل", "نهار", "حب", "سماء", "شجر", "نهر"];
 let usedWords = JSON.parse(localStorage.getItem('usedWords')) || [];
 let secretWord = getRandomWord();
 const wordLength = secretWord.length;
@@ -36,9 +36,10 @@ function getRandomWord() {
     return randomWord;
 }
 
-// إنشاء خانات الكلمات
+// إنشاء خانات الكلمات بناءً على عدد حروف الكلمة
 function createGrid() {
     wordGrid.innerHTML = '';
+    wordGrid.style.gridTemplateColumns = `repeat(${wordLength}, 60px)`; // عدد الخانات حسب عدد الحروف
     for (let i = 0; i < attempts; i++) {
         for (let j = 0; j < wordLength; j++) {
             const cell = document.createElement('div');
