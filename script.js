@@ -9,9 +9,15 @@ let currentAttempt = 0;
 const wordGrid = document.getElementById('word-grid');
 const keyboard = document.getElementById('keyboard');
 const message = document.getElementById('message');
+const checkButton = document.getElementById('check-button');
 
-// حروف الكيبورد
-const keys = ['ا', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي'];
+// ترتيب الكيبورد العربي (QWERTY)
+const keys = [
+    'ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'خ', 'ح',
+    'ج', 'د', 'ش', 'س', 'ي', 'ب', 'ل', 'ا', 'ت', 'ن',
+    'م', 'ك', 'ط', 'ئ', 'ء', 'ؤ', 'ر', 'لا', 'ى', 'ة',
+    'و', 'ز', 'ظ'
+];
 
 // إنشاء خانات الكلمات
 function createGrid() {
@@ -30,6 +36,7 @@ function createKeyboard() {
         const keyElement = document.createElement('div');
         keyElement.classList.add('key');
         keyElement.textContent = key;
+        keyElement.setAttribute('data-key', key); // إضافة خاصية data-key
         keyElement.addEventListener('click', () => handleKeyPress(key));
         keyboard.appendChild(keyElement);
     });
@@ -44,7 +51,6 @@ function handleKeyPress(key) {
     for (let i = startIndex; i < endIndex; i++) {
         if (!cells[i].textContent) {
             cells[i].textContent = key;
-            cells[i].classList.add('flip'); // أنيميشن للخانة
             break;
         }
     }
@@ -60,16 +66,16 @@ function checkWord() {
     if (guessedWord.length === wordLength) {
         for (let i = 0; i < wordLength; i++) {
             const cell = cells[startIndex + i];
-            const key = document.querySelector(`.key:contains('${guessedWord[i]}')`);
+            const key = document.querySelector(`.key[data-key='${guessedWord[i]}']`);
 
             if (guessedWord[i] === secretWord[i]) {
-                cell.style.backgroundColor = '#6aaa64'; // أخضر
+                cell.classList.add('correct'); // أخضر
                 key.classList.add('correct');
             } else if (secretWord.includes(guessedWord[i])) {
-                cell.style.backgroundColor = '#c9b458'; // أصفر
+                cell.classList.add('present'); // أصفر
                 key.classList.add('present');
             } else {
-                cell.style.backgroundColor = '#787c7e'; // رمادي
+                cell.classList.add('absent'); // رمادي
                 key.classList.add('absent');
             }
         }
@@ -98,8 +104,5 @@ function disableKeyboard() {
 createGrid();
 createKeyboard();
 
-// إضافة زر للتحقق من الكلمة
-const checkButton = document.createElement('button');
-checkButton.textContent = 'تحقق';
+// إضافة حدث لزر التحقق
 checkButton.addEventListener('click', checkWord);
-keyboard.appendChild(checkButton);
