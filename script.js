@@ -62,6 +62,9 @@ function initializeGame() {
 
     // تعديل التنسيق للهواتف
     adjustLayoutForMobile();
+
+    // إضافة مستمع لزر التلميح
+    document.getElementById('hint-button').addEventListener('click', showHint);
 }
 
 //  *  دوال تتعامل مع كلمات اللعبة
@@ -199,15 +202,20 @@ function checkWord() {
             }
         }
 
+        console.log("correctCount:", correctCount, "wordLength:", wordLength); // إضافة هذا السطر
+
         if (correctCount === wordLength) {
             updateScore();
             updateStats("win");
+            console.log("showResult is called after win"); // Add this line
             showResult("مبروك! انت فزت!", "#6aaa64");
             playSound(winSound);
         } else {
             currentAttempt++;
+            console.log("currentAttempt:", currentAttempt, "attempts:", attempts); // Add this line
             if (currentAttempt === attempts) {
                 updateStats("loss");
+                console.log("showResult is called after loss"); // Add this line
                 showResult(`للأسف! الكلمة الصحيحة كانت: ${secretWord}`, "#ff4d4d");
                 playSound(loseSound);
             }
@@ -226,6 +234,7 @@ function showResult(msg, color) {
     resultMessage.textContent = msg;
     resultMessage.style.color = color;
     resultScreen.classList.remove('hidden');
+    console.log("showResult function called"); // Add this line
 }
 
 function triggerKeyEffect(key) {
@@ -302,6 +311,7 @@ function goHome() {
 
 //  * الدوال التي تتعامل مع الإحصائيات
 function updateStats(result) {
+    console.log("updateStats called with:", result); // Add this line
     if (result === "win") {
         wins++;
         bestScore = Math.max(bestScore, attempts - currentAttempt); // Simplified best score calculation
