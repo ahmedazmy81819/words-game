@@ -269,6 +269,7 @@ body {
     text-align: center;
     color: #eee;
     animation: slideIn 0.5s ease-out;
+    z-index: 1000; /* تأكد من أن العنصر يظهر فوق العناصر الأخرى */
 }
 
 @keyframes slideIn {
@@ -324,15 +325,6 @@ body {
         padding: 10px 20px;
         font-size: 16px;
     }
-}
-
-#stats h2 {
-    margin-bottom: 10px;
-    font-size: 16px;
-}
-
-#stats p {
-    margin: 5px 0;
 }
 
 /* أنماط إضافية لرسالة تدوير الهاتف */
