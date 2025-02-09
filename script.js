@@ -28,14 +28,6 @@ const resultMessage = document.getElementById('result-message');
 const nextButton = document.getElementById('next-button');
 const homeButton = document.getElementById('home-button');
 
-// متغيرات الإحصائيات
-let wins = parseInt(localStorage.getItem('wins')) || 0;
-let losses = parseInt(localStorage.getItem('losses')) || 0;
-let bestScore = parseInt(localStorage.getItem('bestScore')) || 0;
-
-// تحديث عرض الإحصائيات
-updateStatsDisplay();
-
 // ** الدوال **
 
 function initializeGame() {
@@ -202,20 +194,12 @@ function checkWord() {
             }
         }
 
-        console.log("correctCount:", correctCount, "wordLength:", wordLength); // إضافة هذا السطر
-
         if (correctCount === wordLength) {
-            updateScore();
-            updateStats("win");
-            console.log("showResult is called after win"); // Add this line
             showResult("مبروك! انت فزت!", "#6aaa64");
             playSound(winSound);
         } else {
             currentAttempt++;
-            console.log("currentAttempt:", currentAttempt, "attempts:", attempts); // Add this line
             if (currentAttempt === attempts) {
-                updateStats("loss");
-                console.log("showResult is called after loss"); // Add this line
                 showResult(`للأسف! الكلمة الصحيحة كانت: ${secretWord}`, "#ff4d4d");
                 playSound(loseSound);
             }
@@ -224,17 +208,12 @@ function checkWord() {
 }
 
 //  * الدوال التي تتعامل مع العرض المرئي
-function updateStatsDisplay() {
-    document.getElementById('wins').textContent = wins;
-    document.getElementById('losses').textContent = losses;
-    document.getElementById('best-score').textContent = bestScore;
-}
-
 function showResult(msg, color) {
-    resultMessage.textContent = msg;
-    resultMessage.style.color = color;
-    resultScreen.classList.remove('hidden');
-    console.log("showResult function called"); // Add this line
+    setTimeout(() => {
+        resultMessage.textContent = msg;
+        resultMessage.style.color = color;
+        resultScreen.classList.remove('hidden');
+    }, 100); // تأخير 100 مللي ثانية
 }
 
 function triggerKeyEffect(key) {
@@ -305,34 +284,7 @@ function resetKeyboardColors() {
 }
 
 function goHome() {
-    //في صفحة رئيسية مينفعش يرجع لصفحة رئيسية
     window.location.reload();
-}
-
-//  * الدوال التي تتعامل مع الإحصائيات
-function updateStats(result) {
-    console.log("updateStats called with:", result); // Add this line
-    if (result === "win") {
-        wins++;
-        bestScore = Math.max(bestScore, attempts - currentAttempt); // Simplified best score calculation
-    } else {
-        losses++;
-    }
-
-    // Update display and localStorage
-    updateStatsDisplay();
-    localStorage.setItem('wins', wins.toString());
-    localStorage.setItem('losses', losses.toString());
-    localStorage.setItem('bestScore', bestScore.toString());
-}
-
-//  * الدوال التي تتعامل مع النقاط
-let score = 0; // Initialize score
-
-function updateScore() {
-    const points = attempts - currentAttempt;
-    score += points * 10;
-    console.log(`Score: ${score}`); // For debugging purposes
 }
 
 //  * الدوال التي تتعامل مع المدخلات
